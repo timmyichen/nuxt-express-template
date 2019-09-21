@@ -1,8 +1,7 @@
+const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
+
 module.exports = {
   mode: "universal",
-  /*
-   ** Headers of the page
-   */
   head: {
     title: process.env.npm_package_name || "",
     meta: [
@@ -16,43 +15,64 @@ module.exports = {
     ],
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }]
   },
-  /*
-   ** Customize the progress-bar color
-   */
   loading: { color: "#fff" },
-  /*
-   ** Global CSS
-   */
   css: [],
-  /*
-   ** Plugins to load before mounting the App
-   */
   plugins: [],
-  /*
-   ** Nuxt.js dev-modules
-   */
-  buildModules: ["@nuxt/typescript-build"],
-  /*
-   ** Nuxt.js modules
-   */
-  modules: [
-    // Doc: https://bootstrap-vue.js.org/docs/
-    "bootstrap-vue/nuxt",
-    // Doc: https://axios.nuxtjs.org/usage
-    "@nuxtjs/axios"
-  ],
-  /*
-   ** Axios module configuration
-   ** See https://axios.nuxtjs.org/options
-   */
+  buildModules: [],
+  modules: ["bootstrap-vue/nuxt", "@nuxtjs/axios"],
   axios: {},
-  /*
-   ** Build configuration
-   */
+  dir: {
+    components: "client/components",
+    layouts: "client/layouts",
+    pages: "client/pages",
+    store: "client/store"
+  },
   build: {
-    /*
-     ** You can extend webpack config here
-     */
-    extend(config, ctx) {}
+    extend(config, ctx) {
+      let directory = ctx.isServer ? "server" : "client";
+      const configFile = `${directory}/tsconfig.json`;
+
+      const tsLoader = {
+        loader: "ts-loader",
+        options: {
+          transpileOnly: true,
+          configFile
+        },
+        exclude: [/vendor/, /\.nuxt/]
+      };
+
+      if (ctx.isClient) {
+        tsLoader.options.appendTsSuffixTo = [/\.vue$/];
+      }
+
+      config.resolve.extensions.push(".ts");
+
+      config.resolve.alias[directory] = ".";
+
+      config.plugins.push(
+        new ForkTsCheckerWebpackPlugin({
+          tsconfig: configFile
+        })
+      );
+
+      if (ctx.isServer) {
+        config.module.rules.push({
+          test: /server\/.*\.ts$/,
+          ...tsLoader
+        });
+      } else {
+        config.module.rules.push({
+          test: /client\/.*\.tsx?$/,
+          ...tsLoader
+        });
+
+        config.module.rules.map(rule => {
+          if (rule.loader === "vue-loader") {
+            rule.options.loaders = { ts: tsLoader };
+          }
+          return rule;
+        });
+      }
+    }
   }
 };

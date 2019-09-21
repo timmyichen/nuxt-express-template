@@ -1,19 +1,18 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
+    "target": "es6",
+    "module": "commonjs",
     "moduleResolution": "node",
     "lib": ["esnext", "esnext.asynciterable", "dom"],
-    "esModuleInterop": true,
     "allowJs": true,
     "sourceMap": true,
     "strict": true,
     "noEmit": true,
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./*"],
-      "@/*": ["./*"]
+      "server/*": ["./*"]
     },
     "types": ["@types/node", "@nuxt/types", "@types/express"]
-  }
+  },
+  "include": ["."]
 }

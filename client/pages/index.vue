@@ -2,7 +2,7 @@
   <div class="container">
     <div>
       <logo />
-      <h1 class="title">temp</h1>
+      <h1 class="title">Template</h1>
       <h2 class="subtitle">My pioneering Nuxt.js project</h2>
       <div class="links">
         <a href="https://nuxtjs.org/" target="_blank" class="button--green">Documentation</a>
@@ -13,9 +13,7 @@
 </template>
 
 <script lang="ts">
-import Logo from "~/components/Logo.vue";
-let x = 123123123;
-console.log(x);
+import Logo from "../components/Logo.vue";
 
 export default {
   components: {

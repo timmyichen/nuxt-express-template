@@ -1,0 +1,15 @@
+{
+  "presets": ["vue"],
+  "plugins": [
+    [
+      "module-resolver",
+      {
+        "root": ["."],
+        "alias": {
+          "client": "./client",
+          "server": "./server"
+        }
+      }
+    ]
+  ]
+}

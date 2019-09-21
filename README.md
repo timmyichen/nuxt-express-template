@@ -1,10 +1,8 @@
-# temp
-
-> My pioneering Nuxt.js project
+# Nuxt / Express / TypeScript Template
 
 ## Build Setup
 
-``` bash
+```bash
 # install dependencies
 $ npm run install
 
